@@ -249,7 +249,15 @@ public class MainFunction {
 				if(register.contains(c.getCourseID()))
 				{
 					count = count + 1;
-					continue;
+					if(count == register.size())
+					{
+						System.out.println("You are already enrolled in all course");
+						break;
+					}
+					else
+					{
+						continue;
+					}
 				}				
 				else
 				{
@@ -280,15 +288,9 @@ public class MainFunction {
 					nextId.setNextId(next);
 					session.update(nextId);
 				}
-			}
-			if(count == register.size())
-			{
-				System.out.println("You are already enrolled in all course");
-			}
-			else
-			{
-				System.out.println("All courses are added to your schedule");
 			}			
+			System.out.println("All courses are added to your schedule");
+						
 		}
 		
 		session.getTransaction().commit();	
@@ -330,14 +332,20 @@ public class MainFunction {
 		String hql = "From Register R Where R.stdID = '"+id+"'";
 		Query query = session.createQuery(hql);		
 		List results = query.list();
-		ArrayList<Register> courseInfo = (ArrayList<Register>) results;
-		
-		int i = 0;		
-		for(Register r : courseInfo)
+		if(results.isEmpty())
 		{
-			i = i + 1;			
-			System.out.println(i + ": " + r.getCourseID());			
-		}		
+			System.out.println("You have not enrolled in any course");
+		}
+		else
+		{
+			ArrayList<Register> courseInfo = (ArrayList<Register>) results;			
+			int i = 0;		
+			for(Register r : courseInfo)
+			{
+				i = i + 1;			
+				System.out.println(i + ": " + r.getCourseID());			
+			}
+		}
 		session.getTransaction().commit();	
 		session.close();
 	}
